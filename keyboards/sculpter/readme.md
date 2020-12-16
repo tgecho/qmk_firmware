@@ -8,6 +8,16 @@
 * Hardware Supported: *The PCBs, controllers supported*
 * Hardware Availability: *Links to where you can find this hardware*
 
+
+## How to build
+All commands are run from the root directory of the repository.
+
+
+First, make sure you have the required submodules.
+
+    make git-submodule
+
+
 Make example for this keyboard (after setting up your build environment):
 
     make sculpter:default
@@ -19,11 +29,5 @@ Flashing example for this keyboard:
 See the [build environment setup](https://docs.qmk.fm/#/getting_started_build_tools) and the [make instructions](https://docs.qmk.fm/#/getting_started_make_guide) for more information. Brand new to QMK? Start with our [Complete Newbs Guide](https://docs.qmk.fm/#/newbs).
 
 
-## To Build
-From the root directory of the repo:
-```
-make git-submodule
-make sculpter:default
-```
 
 The outputted files will be in the `.build` folder.
