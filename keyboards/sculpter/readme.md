@@ -95,14 +95,16 @@ The Teensy has been around for a while and has been superceded by multple new ve
 
 ## The Matrix
 
+- The Microsoft hardware matrix doesn't change.
 - The original key matrix is exposed via a 30 pin ribbon cable, with a 1mm pitch.
 - We can simply pull this cable out of the existing PCB, and plug it into the new one.
+- We'll make slight change to the matrix structure, however this is achieved on the custom PCB.
 
 > Note that during this mod, I only cared about the US english layout version. However, the same principles apply to other languages. You just need to map the keys correctly into their respective rows and columns. If other languages interest you, raise a GitHub issue and I could probably help.
 
 ### The Original Matrix
 
-This original matrix uses 8 rows and 18 columns, which requires 26 pins on the micro controller (but we don't have that, see the following information)
+This original matrix uses 8 rows and 18 columns, which requires 26 pins on the micro controller (on the Teensy 2.0 we don't have that many, but we solve this issue, keep reading)
 
 **Important:** In code we reference these rows and columns with a zero index. From here on, the documentation also refers to columns using zero index. So if "column 2" is mentioned for example, physically this represents column 3. If you're not a programmer by trade, this might get a bit tricky to get used to, but it's important to remember this.
 
@@ -121,11 +123,11 @@ This original matrix uses 8 rows and 18 columns, which requires 26 pins on the m
 
 The Teensy 2.0 microcontroller we use in this mod doesn't have enough general purpose input/output (GPIO) pins to support each of the rows and columns in the physical keyboard matrix. We're one GPIO pin short - as mentioned, 8 + 18 = 26 total pins required.
 
-The Teensy only has 25 GPIO pins. Luckily, (and as worked out by our [primary resource](https://github.com/blttll/tmk_keyboard)), it doesn't matter as we are able to "collapse" at least two of those columns in the original layout, without any of the keys clashing. By collapsing these two columns, we can still support all the keys, and we now only need 25 GIPO pins. You can see this bridge in the scematic in the PCB section.
+The Teensy only has 25 GPIO pins. Luckily, (and as worked out by our [primary resource](https://github.com/blttll/tmk_keyboard)), it doesn't matter as we are able to "collapse" two of those columns into one, without any of the keys clashing. By collapsing these two columns, we can still support all the keys, and we now only need 25 GIPO pins.
 
-This is achieved by physically bridging two of the traces in the flex connector via our custom PCB. In this case, we're bridging columns 2 and 6, which physically exist on traces 16 and 12.
+This is achieved by physically bridging two of the traces in the flex connector via our custom PCB. In this case, we're bridging columns 2 and 6, which physically exist on traces 16 and 12. You can see this bridge in the scematic in the PCB section.
 
-The layout table from above will now look like this (the letters (A) - (G) will be explained soon).
+The layout table from above will now look like this. Columns 10-16 have additional letters, this will be explained soon.
 
 |       | 0    | 1     | 2    | 3    | 4    | 5    | 6    | 7    | 8    | 9    | 10 (A) | 11 (B) | 12 (C) | 13 (D) | 14 (E) | 15 (F) | 16 (G) |
 | ----- | ---- | ----- | ---- | ---- | ---- | ---- | ---- | ---- | ---- | ---- | ------ | ------ | ------ | ------ | ------ | ------ | ------ |
@@ -138,7 +140,7 @@ The layout table from above will now look like this (the letters (A) - (G) will 
 | **6** | lctl | right |      | up   | down |      |      | rspc | N    | B    | lspc   |        |        |        |        |        | rctl   |
 | **7** |      | pscr  |      | F11  | eql  | F9   | F8   | F10  | F7   | 5    | F2     | F1     | grv    |        | 6      |        |        |
 
-You'll see that `ralt` and `rsft` now both reside in column 2, the original column 6 is now gone, and all the preceding columns have shifted down (thus, the original column 7 is now column 6, and so on).
+You'll see that `ralt` (right alt) and `rsft`  (right shift) now both reside in column 2, the original column 6 is now gone, and all the preceding columns have shifted down (thus, the original column 7 is now column 6, and so on).
 
 ### Mapping the modded layout in QMK
 
@@ -146,11 +148,13 @@ Now that we've modded the matrix to fit into the pins on the Teensy 2.0, we can 
 
 This looks insane, but there is a method to the madness.
 
-The first section defines the physical layout of the keybord. So, `K4C` for example is the escape key, `K7B` is the F1 key, and so on. Think of it as modelling the layout of the keys on the physical device (refer to the matrix table above for keycodes).
+The first section defines the physical layout of the keybord. So, `K4C` for example is the escape key, `K7B` is the F1 key, and so on. Think of it as modelling the layout of the keys on the physical device (refer to the matrix table above for keycodes). The key codes you see in this part effecitvely follow one for one the physical layout of the keyboard.
 
-The second part maps these keys into the actual matrix structure. It allows QMK to map the keys you put in your own keymaps (see below), to the physical matrix.
+The second part maps these keys into the actual matrix structure that the QMK firmware uses to know which key/s a user is pressing at any given time. It allows QMK to map keys you press to the custom layouts that you create.
 
-You'll see that the keynames follow the format `K{ROW}{COLUMN}`, and after column 9, we move to letters (i.e 10, 11,12,... is A,B,C,... etc)
+You'll see that the keynames follow the format `K{ROW}{COLUMN}`, and after column 9, we move to letters (i.e 10, 11,12,... is A,B,C,... etc). Each of these codes can be referenced in our matrix table above to know which key it represents on the physical keyboard.
+
+`KC_NO` just means that we aren't using this key in the matrix.
 
 ```c
 #define LAYOUT( \
