@@ -128,24 +128,52 @@ The Teensy only has 25 GPIO pins. Luckily, (and as worked out by our [primary re
 
 This is achieved by physically bridging two of the traces in the flex connector via our custom PCB. In this case, we're bridging columns 2 and 6, which physically exist on traces 16 and 12.
 
-The layout table from above will now look like this.
+The layout table from above will now look like this (the letters (A) - (G) will be explained soon).
 
-|       | 0    | 1     | 2    | 3    | 4    | 5    | 6    | 7    | 8    | 9    | 10   | 11   | 12   | 13   | 14   | 15   | 16   |
-| ----- | ---- | ----- | ---- | ---- | ---- | ---- | ---- | ---- | ---- | ---- | ---- | ---- | ---- | ---- | ---- | ---- | ---- |
-| **0** |      | paus  |      | del  | 0    | 9    | 8    | bspc | 7    | tab  | Q    | 2    | 1    |      |      |      |      |
-| **1** |      | pgup  |      | F12  | lbrc | mins | rbrc | ins  | Y    | F5   | F3   | W    | 4    |      | F6   |      |      |
-| **2** |      | home  |      | calc | P    | O    | I    |      | U    | R    | E    | caps | 3    |      | T    |      |      |
-| **3** |      | slck  |      | ent  | scln | L    | K    | bsls | J    | F    | D    |      | A    |      | lgui |      |      |
-| **4** |      |       | ralt | app  | slsh | quot |      | left | H    | G    | F4   | S    | esc  |      |      | lalt |      |
-| **5** |      | end   | rsft | pgdn |      | dot  | comm |      | M    | V    | C    | X    | Z    | lsft |      |      |      |
-| **6** | lctl | right |      | up   | down |      |      | rspc | N    | B    | lspc |      |      |      |      |      | rctl |
-| **7** |      | pscr  |      | F11  | eql  | F9   | F8   | F10  | F7   | 5    | F2   | F1   | grv  |      | 6    |      |      |
+|       | 0    | 1     | 2    | 3    | 4    | 5    | 6    | 7    | 8    | 9    | 10 (A) | 11 (B) | 12 (C) | 13 (D) | 14 (E) | 15 (F) | 16 (G) |
+| ----- | ---- | ----- | ---- | ---- | ---- | ---- | ---- | ---- | ---- | ---- | ------ | ------ | ------ | ------ | ------ | ------ | ------ |
+| **0** |      | paus  |      | del  | 0    | 9    | 8    | bspc | 7    | tab  | Q      | 2      | 1      |        |        |        |        |
+| **1** |      | pgup  |      | F12  | lbrc | mins | rbrc | ins  | Y    | F5   | F3     | W      | 4      |        | F6     |        |        |
+| **2** |      | home  |      | calc | P    | O    | I    |      | U    | R    | E      | caps   | 3      |        | T      |        |        |
+| **3** |      | slck  |      | ent  | scln | L    | K    | bsls | J    | F    | D      |        | A      |        | lgui   |        |        |
+| **4** |      |       | ralt | app  | slsh | quot |      | left | H    | G    | F4     | S      | esc    |        |        | lalt   |        |
+| **5** |      | end   | rsft | pgdn |      | dot  | comm |      | M    | V    | C      | X      | Z      | lsft   |        |        |        |
+| **6** | lctl | right |      | up   | down |      |      | rspc | N    | B    | lspc   |        |        |        |        |        | rctl   |
+| **7** |      | pscr  |      | F11  | eql  | F9   | F8   | F10  | F7   | 5    | F2     | F1     | grv    |        | 6      |        |        |
 
 You'll see that `ralt` and `rsft` now both reside in column 2, the original column 6 is now gone, and all the preceding columns have shifted down (thus, the original column 7 is now column 6, and so on).
 
 ### Mapping the modded layout in QMK
 
 Now that we've modded the matrix to fit into the pins on the Teensy 2.0, we can create a [custom layout](https://github.com/qmk/qmk_firmware/blob/master/docs/hardware_avr.md#keyboardh) that allows QMK to work with the Sculpt. This is defined in `sculpter.h`
+
+This looks insane, but there is a method to the madness.
+
+The first section defines the physical layout of the keybord. So, `K4C` for example is the escape key, `K7B` is the F1 key, and so on. Think of it as modelling the layout of the keys on the physical device (refer to the matrix table above for keycodes).
+
+The second part maps these keys into the actual matrix structure. It allows QMK to map the keys you put in your own keymaps (see below), to the physical matrix.
+
+```c
+#define LAYOUT( \
+  K4C, K7B, K7A, K1A, K4A, K19, K1E, K78, K76, K75, K77, K73, K13, K71, K31, K01, K23, \
+  K7C, K0C, K0B, K2C, K1C, K79, K7E, K08, K06, K05, K04, K15, K74, K07     , K03, K21, \
+  K09			, K0A, K1B, K2A, K29, K2E, K18, K28, K26, K25, K24, K14, K16, K37,      K51, \
+  K2B     , K3C, K4B, K3A, K39, K49, K48, K38, K36, K35, K34, K45, K33     , K17, K11, \
+  K5D			, K5C, K5B, K5A, K59, K69, K68		 , K58, K56, K55, K44, K52		 , K63, K53, \
+  K60			, K3E, K4F, K6A, 					 K67, 					K42, K43, K6G			, K47, K64, K61 \
+) { \
+    { KC_NO, K01, KC_NO, K03, K04, K05, K06, K07, K08, K09, K0A, K0B, K0C, KC_NO, KC_NO, KC_NO, KC_NO }, \
+    { KC_NO, K11, KC_NO, K13, K14, K15, K16, K17, K18, K19, K1A, K1B, K1C, KC_NO, K1E, KC_NO, KC_NO, }, \
+    { KC_NO, K21, KC_NO, K23, K24, K25, K26, KC_NO, K28, K29, K2A, K2B, K2C, KC_NO, K2E, KC_NO, KC_NO, }, \
+    { KC_NO, K31, KC_NO, K33, K34, K35, K36, K37, K38, K39, K3A, KC_NO, K3C, KC_NO, K3E, KC_NO, KC_NO, }, \
+    { KC_NO, KC_NO, K42, K43, K44, K45, KC_NO, K47, K48, K49, K4A, K4B, K4C, KC_NO, KC_NO, K4F, KC_NO, }, \
+    { KC_NO, K51, K52, K53, KC_NO, K55, K56, KC_NO, K58, K59, K5A, K5B, K5C, K5D, KC_NO, KC_NO, KC_NO, }, \
+    { K60,   K61, KC_NO, K63, K64, KC_NO, KC_NO, K67, K68, K69, K6A, KC_NO, KC_NO, KC_NO, KC_NO, KC_NO, K6G, }, \
+    { KC_NO, K71, KC_NO, K73, K74, K75, K76, K77, K78, K79, K7A, K7B, K7C, KC_NO, K7E  KC_NO, KC_NO, } \
+}
+```
+
+
 
 
 
