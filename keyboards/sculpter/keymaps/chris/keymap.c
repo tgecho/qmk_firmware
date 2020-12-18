@@ -21,6 +21,10 @@ enum layer_names {
     _QWERTY
 };
 
+enum custom_keycodes {
+    LEFT_COMMAND,
+};
+
 const uint16_t PROGMEM keymaps[][MATRIX_ROWS][MATRIX_COLS] = {
     /* Base */
     [_BASE] = LAYOUT(
@@ -29,7 +33,7 @@ const uint16_t PROGMEM keymaps[][MATRIX_ROWS][MATRIX_COLS] = {
       KC_TAB, KC_SCOLON, KC_COMMA, KC_DOT, KC_P, KC_Y, KC_F, KC_G, KC_C, KC_R, KC_L, KC_SLASH, KC_AT, KC_BSLASH, KC_NO,
       KC_CAPS, KC_A, KC_O, KC_E, KC_U, KC_I, KC_D, KC_H, KC_T, KC_N, KC_S, KC_MINUS, KC_ENT, KC_NO, KC_NO,
       KC_LSFT, KC_QUOT, KC_Q, KC_J, KC_K, KC_X, KC_B, KC_M, KC_W, KC_V, KC_Z, KC_RSFT, KC_UP, KC_NO,
-      KC_LCTL, KC_LALT, KC_LGUI, KC_SPC, KC_SPC, KC_RALT, KC_APP, KC_RCTL, KC_LEFT, KC_DOWN, KC_RGHT
+      KC_LCTL, KC_LALT, LEFT_COMMAND, KC_SPC, KC_SPC, KC_RALT, KC_APP, KC_RCTL, KC_LEFT, KC_DOWN, KC_RGHT
     ),
     [_QWERTY] = LAYOUT(
       KC_ESC, KC_F1, KC_F2, KC_F3, KC_F4, KC_F5, KC_F6, KC_F7, KC_F8, KC_F9, KC_F10, KC_F11, KC_F12, KC_PSCR, KC_SLCK, KC_PAUS, RESET,
@@ -39,8 +43,31 @@ const uint16_t PROGMEM keymaps[][MATRIX_ROWS][MATRIX_COLS] = {
       KC_LSFT, KC_Z, KC_X, KC_C, KC_V, KC_B, KC_N, KC_M, KC_COMM, KC_DOT, KC_SLSH, KC_RSFT, KC_UP, KC_PGDN,
       KC_LCTL, KC_LGUI, KC_LALT, KC_SPC, KC_SPC, KC_RALT, KC_APP, KC_RCTL, KC_LEFT, KC_DOWN, KC_RGHT
     )
-};
+}
+void left_command_handler(keyrecord_t *record) {
+    static uint16_t timer;
+    if(record->event.pressed) {
+        timer = timer_read();
+        // register_mods(MOD_LGUI);
+        // layer_on(_QWERTY);
+        SEND_STRING("DOWN");
+    } else {
+        // unregister_mods(MOD_LGUI);
+        // layer_off(_QWERTY);
+        SEND_STRING("UP");
+        if (timer_elapsed(timer) < TAPPING_TERM) {
+          // Can make the command button a tappable key also
+          // tap_code(KC_ESCAPE);
+          SEND_STRING("TAP");
+        }
+    }
+}
 
 bool process_record_user(uint16_t keycode, keyrecord_t *record) {
+    switch (keycode) {
+      case LEFT_COMMAND:
+        left_command_handler(record);
+        return false;
+    }
     return true;
 }

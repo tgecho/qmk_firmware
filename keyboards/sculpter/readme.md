@@ -2,36 +2,37 @@
 
 ![sculpter](imgur.com image replace me!)
 
-*A short description of the keyboard/project*
+*A modded version of the Microsoft Sculpt ergonomic keyboard.*
 
 * Keyboard Maintainer: [Chris Paynter](https://github.com/yourusername)
 * Hardware Supported: *The PCBs, controllers supported*
 * Hardware Availability: *Links to where you can find this hardware*
 
-
-## How to build
-All commands are run from the root directory of the repository.
-
-
-First, make sure you have the required submodules.
-
-    make git-submodule
-
-
-Make example for this keyboard (after setting up your build environment):
-
-    make sculpter:default
-
-Flashing example for this keyboard:
-
-    make sculpter:default:flash
+## How to build and flash
 
 See the [build environment setup](https://docs.qmk.fm/#/getting_started_build_tools) and the [make instructions](https://docs.qmk.fm/#/getting_started_make_guide) for more information. Brand new to QMK? Start with our [Complete Newbs Guide](https://docs.qmk.fm/#/newbs).
 
-The outputted files will be in the `.build` folder.
+All commands are run from the root directory of the repository. The compiled files will be in the `.build` folder.
 
-## How to load the firmware onto the keyboard
-After building, as per above, you'll see a hex file in the `.build` folder at the root of the repository.
+1. Install the QMK required submodules
+
+   ```
+   make git-submodule
+   ```
+
+2. Compile the layout (change `default` to build your keymaps)
+
+   ```
+   make sculpter:default
+   ```
+
+3. Flash the firmware to your keyboard
+
+   ```
+   make sculpter:default:flash
+   ```
+
+   The `Calculator` button at the top right of the keyboard is assigned as the reset button in default layout.
 
 # Motivation
 
