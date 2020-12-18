@@ -18,8 +18,16 @@
 // Defines names for use in layer keycodes and the keymap
 enum layer_names {
     _BASE,
-    _QWERTY
+    _QWERTY,
+    _NUMERAL,
 };
+
+enum custom_keys {
+  BASE_LCTL,
+  BASE_LGUI,
+};
+
+static bool shift_held = false;
 
 
 const uint16_t PROGMEM keymaps[][MATRIX_ROWS][MATRIX_COLS] = {
@@ -30,7 +38,7 @@ const uint16_t PROGMEM keymaps[][MATRIX_ROWS][MATRIX_COLS] = {
       KC_TAB, KC_SCOLON, KC_COMMA, KC_DOT, KC_P, KC_Y, KC_F, KC_G, KC_C, KC_R, KC_L, KC_SLASH, KC_AT, KC_BSLASH, KC_NO,
       KC_CAPS, KC_A, KC_O, KC_E, KC_U, KC_I, KC_D, KC_H, KC_T, KC_N, KC_S, KC_MINUS, KC_ENT, KC_NO, KC_NO,
       KC_LSFT, KC_QUOT, KC_Q, KC_J, KC_K, KC_X, KC_B, KC_M, KC_W, KC_V, KC_Z, KC_RSFT, KC_UP, KC_NO,
-      KC_LCTL, KC_LALT, KC_LGUI, KC_SPC, KC_SPC, KC_RALT, KC_APP, KC_RCTL, KC_LEFT, KC_DOWN, KC_RGHT
+      BASE_LCTL, KC_LALT, BASE_LGUI, KC_SPC, KC_SPC, KC_RALT, KC_APP, KC_RCTL, KC_LEFT, KC_DOWN, KC_RGHT
     ),
     [_QWERTY] = LAYOUT(
       KC_ESC, KC_F1, KC_F2, KC_F3, KC_F4, KC_F5, KC_F6, KC_F7, KC_F8, KC_F9, KC_F10, KC_F11, KC_F12, KC_PSCR, KC_SLCK, KC_PAUS, KC_NO,
@@ -39,10 +47,20 @@ const uint16_t PROGMEM keymaps[][MATRIX_ROWS][MATRIX_COLS] = {
       KC_CAPS, KC_A, KC_S, KC_D, KC_F, KC_G, KC_H, KC_J, KC_K, KC_L, KC_SCLN, KC_QUOT, KC_ENT, KC_INS, KC_PGUP,
       KC_LSFT, KC_Z, KC_X, KC_C, KC_V, KC_B, KC_N, KC_M, KC_COMM, KC_DOT, KC_SLSH, KC_RSFT, KC_UP, KC_PGDN,
       KC_LCTL, KC_LALT, KC_LGUI, KC_SPC, KC_SPC, KC_RALT, KC_APP, KC_RCTL, KC_LEFT, KC_DOWN, KC_RGHT
-    )
+    ),
 };
 
-void left_command_handler(keyrecord_t *record) {
+void base_lctl_handler(keyrecord_t *record) {
+    if(record->event.pressed) {
+        register_mods(MOD_LCTL);
+        layer_on(_QWERTY);
+    } else {
+        unregister_mods(MOD_LCTL);
+        layer_off(_QWERTY);
+    }
+}
+
+void base_lgui_handler(keyrecord_t *record) {
     // static uint16_t timer;
     if(record->event.pressed) {
         // timer = timer_read();
@@ -57,29 +75,95 @@ void left_command_handler(keyrecord_t *record) {
     }
 }
 
-void left_control_handler(keyrecord_t *record) {
-    // static uint16_t timer;
-    if(record->event.pressed) {
-        // timer = timer_read();
-        register_mods(MOD_LCTL);
-        layer_on(_QWERTY);
-    } else {
-        unregister_mods(MOD_LCTL);
-        layer_off(_QWERTY);
-        // if (timer_elapsed(timer) < TAPPING_TERM) {
-          // Can make the command button a tappable key also
-        // }
-    }
+void handle_custom_shift_key(uint16_t keycode, keyrecord_t *record, bool disableShiftMod) {
+  // Number keys require toggling off the mode for them to work.
+  if (record->event.pressed) {
+      if(disableShiftMod) {
+            unregister_mods(MOD_LSFT);
+      }
+      register_code(keycode);
+  } else {
+      if(disableShiftMod) {
+          register_mods(MOD_LSFT);
+      }
+      unregister_code(keycode);
+  }
 }
 
 bool process_record_user(uint16_t keycode, keyrecord_t *record) {
+
+    if (shift_held) {
+      if(layer_state == _BASE) {
+        // Handle the special shifted keys in Programmer Dvorak
+        switch(keycode)
+        {
+          case KC_DLR:
+            handle_custom_shift_key(KC_TILDE, record, false);
+            return false;
+          case KC_AMPR:
+            handle_custom_shift_key(KC_PERC, record, false);
+            return false;
+          case KC_LBRC:
+            handle_custom_shift_key(KC_7, record, true);
+            return false;
+          case KC_LCBR:
+            handle_custom_shift_key(KC_5, record, true);
+            return false;
+          case KC_RCBR:
+            handle_custom_shift_key(KC_3, record, true);
+            return false;
+          case KC_LPRN:
+            handle_custom_shift_key(KC_1, record, true);
+            return false;
+          case KC_EQUAL:
+            handle_custom_shift_key(KC_9, record, true);
+            return false;
+          case KC_ASTR:
+            handle_custom_shift_key(KC_0, record, true);
+            return false;
+          case KC_RPRN:
+            handle_custom_shift_key(KC_2, record, true);
+            return false;
+          case KC_PLUS:
+            handle_custom_shift_key(KC_4, record, true);
+            return false;
+          case KC_RBRC:
+            handle_custom_shift_key(KC_6, record, true);
+            return false;
+          case KC_EXLM:
+            handle_custom_shift_key(KC_8, record, true);
+            return false;
+          case KC_HASH:
+            handle_custom_shift_key(KC_GRAVE, record, true);
+            return false;
+          case KC_AT:
+            handle_custom_shift_key(KC_CIRC, record, false);
+            return false;
+        }
+      }
+    }
+
+
     switch (keycode) {
-      case KC_LGUI:
-        left_command_handler(record);
+      case KC_LSFT:
+        shift_held = record->event.pressed;
+        return true;
+      case BASE_LCTL:
+        base_lctl_handler(record);
         return false;
-      case KC_LCTL:
-        left_control_handler(record);
+      case BASE_LGUI:
+        base_lgui_handler(record);
         return false;
     }
     return true;
 }
+
+
+    // [_QWERTY] = LAYOUT(
+    //   KC_NO, KC_NO, KC_NO, KC_NO, KC_NO, KC_NO, KC_NO, KC_NO, KC_NO, KC_NO, KC_NO, KC_NO, KC_NO, KC_NO, KC_NO, KC_NO, KC_NO,
+    //   KC_NO, KC_NO, KC_NO, KC_NO, KC_NO, KC_NO, KC_NO, KC_NO, KC_NO, KC_NO, KC_NO, KC_NO, KC_NO, KC_NO, KC_NO, KC_NO,
+    //   KC_NO, KC_NO, KC_NO, KC_NO, KC_NO, KC_NO, KC_NO, KC_NO, KC_NO, KC_NO, KC_NO, KC_NO, KC_NO, KC_NO, KC_NO,
+    //   KC_NO, KC_NO, KC_NO, KC_NO, KC_NO, KC_NO, KC_NO, KC_NO, KC_NO, KC_NO, KC_NO, KC_NO, KC_NO, KC_NO, KC_NO,
+    //   KC_NO, KC_NO, KC_NO, KC_NO, KC_NO, KC_NO, KC_NO, KC_NO, KC_NO, KC_NO, KC_NO, KC_NO, KC_NO, KC_NO,
+    //   KC_NO, KC_NO, KC_NO, KC_NO, KC_NO, KC_NO, KC_NO, KC_NO, KC_NO, KC_NO, KC_NO
+    // )
