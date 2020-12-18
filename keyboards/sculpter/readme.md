@@ -69,7 +69,7 @@ All commands are run from the root directory of the repository. The compiled fil
 
 Before using the QMK software, you have to make physical hardware modifications to your keyboard.
 
-> A lot of this information has been repurposed from [this TMK based Sculpt mod](https://github.com/blttll/tmk_keyboard), which was been a huge help to me in figuring out how to modify the Sculpt to work with QMK. The PCB schematic also comes from this resource. A huge help!
+> A lot of this information has been repurposed from [this TMK based Sculpt mod](https://github.com/blttll/tmk_keyboard/tree/master/keyboard/sculpt), which was been a huge help to me in figuring out how to modify the Sculpt to work with QMK. The PCB schematic also comes from this resource. A huge help!
 
 At a top level it'll required you to:
 
@@ -117,7 +117,7 @@ This original matrix uses 8 rows and 18 columns, which requires 26 pins on the m
 | **3** |      | slck  |      | ent  | scln | L    |      | K    | bsls | J    | F    | D    |      | A    |      | lgui |      |      |
 | **4** |      |       |      | app  | slsh | quot | ralt |      | left | H    | G    | F4   | S    | esc  |      |      | lalt |      |
 | **5** |      | end   | rsft | pgdn |      | dot  |      | comm |      | M    | V    | C    | X    | Z    | lsft |      |      |      |
-| **6** | lctl | right |      | up   | down |      |      |      | rspc | N    | B    | lspc |      |      |      |      |      | rctl |
+| **6** | rctl | right |      | up   | down |      |      |      | rspc | N    | B    | lspc |      |      |      |      |      | lctl |
 | **7** |      | pscr  |      | F11  | eql  | F9   |      | F8   | F10  | F7   | 5    | F2   | F1   | grv  |      | 6    |      |      |
 
 ### The Modded Matrix
@@ -138,7 +138,7 @@ The layout table from above will now look like this. Columns 10-16 have addition
 | **3** |      | slck  |      | ent  | scln | L    | K    | bsls | J    | F    | D      |        | A      |        | lgui   |        |        |
 | **4** |      |       | ralt | app  | slsh | quot |      | left | H    | G    | F4     | S      | esc    |        |        | lalt   |        |
 | **5** |      | end   | rsft | pgdn |      | dot  | comm |      | M    | V    | C      | X      | Z      | lsft   |        |        |        |
-| **6** | lctl | right |      | up   | down |      |      | rspc | N    | B    | lspc   |        |        |        |        |        | rctl   |
+| **6** | rctl | right |      | up   | down |      |      | rspc | N    | B    | lspc   |        |        |        |        |        | lctl   |
 | **7** |      | pscr  |      | F11  | eql  | F9   | F8   | F10  | F7   | 5    | F2     | F1     | grv    |        | 6      |        |        |
 
 You'll see that `ralt` (right alt) and `rsft`  (right shift) now both reside in column 2, the original column 6 is now gone, and all the preceding columns have shifted down (thus, the original column 7 is now column 6, and so on).
@@ -164,7 +164,7 @@ You'll see that the keynames follow the format `K{ROW}{COLUMN}`, and after colum
   K09			, K0A, K1B, K2A, K29, K2E, K18, K28, K26, K25, K24, K14, K16, K37,      K51, \
   K2B     , K3C, K4B, K3A, K39, K49, K48, K38, K36, K35, K34, K45, K33     , K17, K11, \
   K5D			, K5C, K5B, K5A, K59, K69, K68		 , K58, K56, K55, K44, K52		 , K63, K53, \
-  K60			, K3E, K4F, K6A, 					 K67, 					K42, K43, K6G			, K47, K64, K61 \
+  K6G			, K3E, K4F, K6A				   , K67          , K42, K43, K60     , K47, K64, K61 \
 ) { \
     { KC_NO, K01, KC_NO, K03, K04, K05, K06, K07, K08, K09, K0A, K0B, K0C, KC_NO, KC_NO, KC_NO, KC_NO }, \
     { KC_NO, K11, KC_NO, K13, K14, K15, K16, K17, K18, K19, K1A, K1B, K1C, KC_NO, K1E, KC_NO, KC_NO, }, \
@@ -172,8 +172,8 @@ You'll see that the keynames follow the format `K{ROW}{COLUMN}`, and after colum
     { KC_NO, K31, KC_NO, K33, K34, K35, K36, K37, K38, K39, K3A, KC_NO, K3C, KC_NO, K3E, KC_NO, KC_NO, }, \
     { KC_NO, KC_NO, K42, K43, K44, K45, KC_NO, K47, K48, K49, K4A, K4B, K4C, KC_NO, KC_NO, K4F, KC_NO, }, \
     { KC_NO, K51, K52, K53, KC_NO, K55, K56, KC_NO, K58, K59, K5A, K5B, K5C, K5D, KC_NO, KC_NO, KC_NO, }, \
-    { K60,   K61, KC_NO, K63, K64, KC_NO, KC_NO, K67, K68, K69, K6A, KC_NO, KC_NO, KC_NO, KC_NO, KC_NO, K6G, }, \
-    { KC_NO, K71, KC_NO, K73, K74, K75, K76, K77, K78, K79, K7A, K7B, K7C, KC_NO, K7E  KC_NO, KC_NO, } \
+    { K60, K61, KC_NO, K63, K64, KC_NO, KC_NO, K67, K68, K69, K6A, KC_NO, KC_NO, KC_NO, KC_NO, KC_NO, K6G, }, \
+    { KC_NO, K71, KC_NO, K73, K74, K75, K76, K77, K78, K79, K7A, K7B, K7C, KC_NO, K7E, KC_NO, KC_NO, } \
 }
 ```
 
