@@ -1,48 +1,8 @@
 {
   "keyboard_name": "sculpter",
-  "url": "",
+  "url": "https://github.com/chrispaynter/qmk_firmware",
   "maintainer": "Chris Paynter",
-  "width": 1,
-  "height": 6,
-  "layouts": {
-    "LAYOUT": {
-      "layout": [
-        {
-          "label": "K4C",
-          "x": 0,
-          "y": 0,
-          "height": 0.5
-        },
-        {
-          "label": "K7C",
-          "x": 0,
-          "y": 1
-        },
-        {
-          "label": "K09",
-          "x": 0,
-          "y": 2,
-          "w": 1.5
-        },
-        {
-          "label": "K2B",
-          "x": 0,
-          "y": 1,
-          "w": 1.5
-        },
-        {
-          "label": "K5D",
-          "x": 1.5,
-          "y": 1,
-          "w": 1.8
-        },
-        {
-          "label": "K60",
-          "x": 1.5,
-          "y": 1,
-          "w": 1.7
-        }
-      ]
-    }
-  }
+  "width": 0,
+  "height": 0,
+  "layouts": {}
 }
