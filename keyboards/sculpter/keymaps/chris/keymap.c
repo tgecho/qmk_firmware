@@ -83,15 +83,23 @@ void base_lgui_handler(keyrecord_t *record) {
     }
 }
 
-void handle_custom_shift_key(uint16_t keycode, keyrecord_t *record, bool disableShiftMod) {
-  // Number keys require toggling off the mode for them to work.
+void handle_custom_shift_key(uint16_t keycode, keyrecord_t *record, bool unshift) {
+  // Because we have shift key pressed to activate this layer, we can't simply
+  // just send the keycode, because it may be a shiftable key.
+  // For example, if we press shift to activate the Programmer Dvorak numbers,
+  // and send the scancode for 5, the OS will still have the shift flag activated.
+  // Therefore, for some scan codes, such as 5, we must temporarily unregister
+  // the shift modifier whilst we send the code, so that the shifted value is not
+  // mapped by the OS, in the case of the scan code for 5, the shifted variant (in ANSI US
+  // layout at least) will be percentage.
+  
   if (record->event.pressed) {
-      if(disableShiftMod) {
+      if(unshift) {
             unregister_mods(MOD_LSFT);
       }
       register_code(keycode);
   } else {
-      if(disableShiftMod) {
+      if(unshift) {
           register_mods(MOD_LSFT);
       }
       unregister_code(keycode);
