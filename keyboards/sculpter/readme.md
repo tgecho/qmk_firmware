@@ -8,6 +8,10 @@
 * Hardware Supported: *The PCBs, controllers supported*
 * Hardware Availability: *Links to where you can find this hardware*
 
+
+
+**NOTE:**  You can read the companion "how to" article for this mod [here](https://chrispaynter.medium.com/modding-the-microsoft-sculpt-ergonomic-keyboard-to-run-qmk-41d3d1caa7e6).
+
 ## How to build and flash
 
 See the [build environment setup](https://docs.qmk.fm/#/getting_started_build_tools) and the [make instructions](https://docs.qmk.fm/#/getting_started_make_guide) for more information. Brand new to QMK? Start with our [Complete Newbs Guide](https://docs.qmk.fm/#/newbs).
@@ -34,6 +38,8 @@ All commands are run from the root directory of the repository. The compiled fil
 
    The `Calculator` button at the top right of the keyboard is assigned as the reset button in default layout.
 
+
+
 # Motivation
 
 ## Primary motivators
@@ -49,50 +55,17 @@ All commands are run from the root directory of the repository. The compiled fil
 - The dongle they provide is locked to the keyboard. You lose that, you lose the keyboard.
 - I've lost a few of them :(
 
-# What to expect from this mod
 
-- The Microsoft Sculpt is an ergonomic keyboard with 88 keys.
-- You'll be able to run QMK on the keyboard, giving you infinite possibilities in programming the keys.
-- The existing microcontroller will be removed and replaced with a QMK compatible one.
 
-## There are caveats!!!
+## Acknowledgements
 
-- **You'll lose wireless capability!** 
-  - This mod make this a _wired_ keyboard.
-  - If you're like me, this is desirable, as per my motivators above.
-  - If you want to keep wirelss, this mod is not for you.
-- **The function switch will become redundant**.
-  - I never used it anyway in 6 years.
-  - QMK can do way more than this switch ever could.
+The `pcb.brd` Eagle file for this project was taken from this TMK based Sculpt mod:
 
-# Hardware Modification
+- https://github.com/blttll/tmk_keyboard/tree/master/keyboard/sculpt
 
-Before using the QMK software, you have to make physical hardware modifications to your keyboard.
+Also, the matrix below was also determined by the same user. Was a very nice help.
 
-> A lot of this information has been repurposed from [this TMK based Sculpt mod](https://github.com/blttll/tmk_keyboard/tree/master/keyboard/sculpt), which was been a huge help to me in figuring out how to modify the Sculpt to work with QMK. The PCB schematic also comes from this resource. A huge help!
 
-At a top level it'll required you to:
-
-- Pull the keyboard apart without breaking it.
-- Remove the existing PCB.
-- Replace with a new PCB that you will get fabricated.
-- Solder components onto the new PCB.
-- Cut new channels into the Sculpt chassis to accomodate the new USB wire.
-- Put the keyboard back together.
-
-## Parts List
-
-- [Microsoft Sculpt](https://www.microsoft.com/accessories/en-us/products/keyboards/sculpt-ergonomic-desktop/l5v-00001)
-- [Printed PCB](https://oshpark.com/profiles/choffee) (I found this already in Oshpark funnily enough)
-- [FFC 30 Pin Connector](https://www.molex.com/molex/products/part-detail/ffc_fpc_connectors/0522713079)
-- [Teensy 2.0](https://www.pjrc.com/store/teensy.html)
-- USB Mini B to USB A cable (I used a 1.5 metre cable)
-
-If you're new to soldering, then you'll need a soldering iron, solder wire and flux.
-
-### Why the Teensy 2.0?
-
-The Teensy has been around for a while and has been superceded by multple new versions of the Teensy. However, it's form factor works really well for this project, allowing us to fit it on our custom board and, together, fitting it in the existing cavity of the Sculpt chassis (albeit with a little bit of modification to the case).
 
 ## The Matrix
 
@@ -178,17 +151,3 @@ You'll see that the keynames follow the format `K{ROW}{COLUMN}`, and after colum
 ```
 
 
-
-
-
-## Connecting the Matrix to the Teensy 2.0
-
-Before the Software can be utilised, you'll obviously need to mod the Sculpt itself.
-
-![](./images/traces.png)
-
-
-
-## Acknowledgements
-The `pcb.brd` Eagle file for this project was taken from this TMK based Sculpt mod:
-- https://github.com/blttll/tmk_keyboard/tree/master/keyboard/sculpt
