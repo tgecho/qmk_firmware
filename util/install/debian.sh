@@ -5,7 +5,7 @@ DEBCONF_NONINTERACTIVE_SEEN=true
 export DEBIAN_FRONTEND DEBCONF_NONINTERACTIVE_SEEN
 
 _qmk_install_prepare() {
-    sudo apt-get update
+    sudo apt-get update $SKIP_PROMPT
 }
 
 _qmk_install() {
@@ -16,7 +16,7 @@ _qmk_install() {
         python3-pip \
         binutils-avr gcc-avr avr-libc \
         binutils-arm-none-eabi gcc-arm-none-eabi libnewlib-arm-none-eabi \
-        avrdude dfu-programmer dfu-util teensy-loader-cli
+        avrdude dfu-programmer dfu-util teensy-loader-cli libusb-dev
 
     python3 -m pip install --user -r $QMK_FIRMWARE_DIR/requirements.txt
 }
