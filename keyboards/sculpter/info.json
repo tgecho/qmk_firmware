@@ -2,7 +2,24 @@
   "keyboard_name": "sculpter",
   "url": "https://github.com/chrispaynter/qmk_firmware",
   "maintainer": "Chris Paynter",
+  "processor": "atmega32u4",
+  "manufacturer": "Me",
+  "usb": {
+    "vid": "0xFEED",
+    "pid": "0x0000",
+    "device_version": "0.0.1"
+  },
   "width": 0,
   "height": 0,
-  "layouts": {}
+  "layouts": {
+    "base": {
+        "layout": [
+            {
+                "label": "Esc",
+                "x": 0,
+                "y": 0
+            }
+        ]
+    }
+  }
 }

@@ -17,6 +17,7 @@
 #pragma once
 
 #include "quantum.h"
+#define AUTOCORRECT_DATA_H "autocorrect_data.h"
 
 /* This is a shortcut to help you visually see your layout.
  *
@@ -25,7 +26,7 @@
  *
  * The second converts the arguments into a two-dimensional array which
  * represents the switch matrix.
- * 
+ *
  * Each of the k__ variables needs to be unique, and typically they follow the format k<row><col>.
  */
 #define LAYOUT( \

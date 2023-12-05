@@ -17,14 +17,12 @@ along with this program.  If not, see <http://www.gnu.org/licenses/>.
 
 #pragma once
 
-#include "config_common.h"
-
 /* USB Device descriptor parameter */
 #define VENDOR_ID    0xFEED
 #define PRODUCT_ID   0x0000
 #define DEVICE_VER   0x0001
-#define MANUFACTURER Chris Paynter
-#define PRODUCT      sculpter
+#define MANUFACTURER "Chris Paynter"
+#define PRODUCT      "sculpter"
 
 /* key matrix size */
 #define MATRIX_ROWS 8
@@ -42,7 +40,7 @@ along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
 #define MATRIX_ROW_PINS { C7, C6, D3, D2, D1, D0, B7, B3 }
 #define MATRIX_COL_PINS { B2, B1, B0, E6, D5, D4, D6, D7, B4, B5, B6, F7, F6, F5, F4, F1, F0 }
-#define UNUSED_PINS
+// #define UNUSED_PINS
 
 /* COL2ROW, ROW2COL */
 #define DIODE_DIRECTION COL2ROW
@@ -144,8 +142,8 @@ along with this program.  If not, see <http://www.gnu.org/licenses/>.
 //#define NO_ACTION_ONESHOT
 
 /* disable these deprecated features by default */
-#define NO_ACTION_MACRO
-#define NO_ACTION_FUNCTION
+// #define NO_ACTION_MACRO
+// #define NO_ACTION_FUNCTION
 
 /* Bootmagic Lite key configuration */
 //#define BOOTMAGIC_LITE_ROW 0
